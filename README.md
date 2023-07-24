@@ -2,9 +2,20 @@
 partial label learning for single cell RNA seq data classification. This code was produced for this article : biorxiv link
   
 1) create virtual environment :
+```
+mkdir plRNAseq
+cd plRNAseq
+python3 -m venv plenv
+source plenv/bin/activate
+pip install -r pl_requirements.txt
+```
+you can desactivate the virtual environment with :  
+```  
+deactivate
+```
 
 
-2) unzip data in the current repertory :  
+3) unzip data in the current repertory :  
 
 ```
 mkdir -p data/datasets/  
