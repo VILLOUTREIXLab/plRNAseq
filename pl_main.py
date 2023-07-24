@@ -22,7 +22,7 @@ from collections import Counter
 from load_pl_data import load_dataset_partial_label
 from pl_model import pl_hKNN, plSVM, pl_nn_prototybe_based
 #from pl_setting import split_partial_label
-import matplotlib.pyplot as plt
+
 #%%
 developpement = False # debugging
 device = 'cpu'    #device = 'cuda:0'
