@@ -6,8 +6,8 @@ partial label learning for single cell RNA seq data classification. This code wa
 
 2) unzip data : 
 in the current repertory :
-
-<mkdir -p data/datasets/  >  
+« code incorporé ».  
+mkdir -p data/datasets/  
 unzip Packer.zip -p data/datasets/  
 unzip Planaria.zip -p data/datasets/  
 unzip Paul.zip -p data/datasets/  
