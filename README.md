@@ -4,14 +4,13 @@ partial label learning for single cell RNA seq data classification. This code wa
 1) create virtual environment :
 
 
-2) unzip data : 
-in the current repertory :
-« code incorporé ».  
+2) unzip data in the current repertory :  
+'''    
 mkdir -p data/datasets/  
 unzip Packer.zip -p data/datasets/  
 unzip Planaria.zip -p data/datasets/  
 unzip Paul.zip -p data/datasets/  
-
+    '''
 
 3) run main script :
 source venv activate
