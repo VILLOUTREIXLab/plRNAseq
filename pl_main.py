@@ -24,7 +24,7 @@ from pl_model import pl_hKNN, plSVM, pl_nn_prototybe_based
 #from pl_setting import split_partial_label
 
 #%%
-developpement = False # debugging
+developpement = True # debugging
 device = 'cpu'    #device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
@@ -39,9 +39,9 @@ k=4
 I = 'I0'
 
 # METHOD
-method_liste = ['PB','plSVM', 'pl_hkNN']
-method = method_liste[1]
-linear = True #False #neural network for PB or kernel for SVM
+method_liste = ['PB','plSVM', 'plhKNN']
+method = method_liste[2]
+linear = False #False #neural network for PB or kernel for SVM
 indice_network = 2 if linear == False  else 0
 
 #HIERARCHY
@@ -132,6 +132,8 @@ if dataset in ['Packer', 'Paul','Planaria'] :
 
 
 mat_C = C if choix_C == 'C' else torch.ones((c,c))- torch.eye(c)
+
+
 #%%
 C ,c, X_train_s, X_train_ws, y_train_s, y_train_ws,\
     y_train_s_prior, y_train_ws_prior, X_test_s, X_test_ws, \
@@ -164,7 +166,7 @@ def init_dict_0(method):
         tiny_model =  plSVM(W=nn.Sequential(nn.Linear(X_train_s.size(1), c)),)
 
     if method == 'plhKNN' :
-        dict_0  = {'C':mat_C,  'C_score':C }
+        dict_0  = {'C':mat_C,  'C_score':C, 'k':10 }
         tiny_model = pl_hKNN()
 
     if method == 'PB' :
@@ -234,6 +236,8 @@ def init_method(method, dict_entry):
 #%%
 dic_0 = init_dict_0(method)[0]
 model = init_method(method, dic_0)
+if method == 'plhKNN' and choix_C == 'flat':
+    model.flat = True
 #%%
 print('FIT')
 model.fit(X_train=torch.cat((X_train_s, X_train_ws), dim=0),
@@ -274,7 +278,7 @@ performance = [ model.score(y_test=y_train_s, y_pred=pred_train_s),
                 ]
 
 print('dataset :' , dataset, ',overlap : ' , overlap,  ',n/p : ', p, ',k : ',k,',I : ',I )
-print('Method : ', method, ' linear : ', linear)
+print('Method : ', method, ' linear : ', linear, ' hierarchy : ', choix_C)
 print('supervised test set accuracy : ',performance[4])
 print('partial label test set accuracy : ',performance[6])
 print('partial label test set accuracy with prior : ',performance[7])
