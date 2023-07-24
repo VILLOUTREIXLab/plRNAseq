@@ -13,17 +13,19 @@ unzip Planaria.zip -p data/datasets/
 unzip Paul.zip -p data/datasets/  
 ```
 
-4) run main script :
+4) run main script:  
+```
 source venv activate
 python3 -u pl_main.py  
+```
 
-
-5) For average results :  
+6) For average results :  
+```
 python3 -u pl_main_average.py
-
-6) For Gridsearch hyperparameters : Note you may need computation ressources, in this case you may change few thing in code see next paragraph  
-
+```
+7) For Gridsearch hyperparameters : Note you may need computation ressources, in this case you may change few thing in code see next paragraph  
+```
 python3 -u pl_main_average_gridsearch.py
-
+```
 7) Need to change PATH file and save file  
    
