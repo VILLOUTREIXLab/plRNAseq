@@ -284,7 +284,7 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             X = np.load(path_file+'X_pca.npy', allow_pickle=True)
             y= np.load(path_file+'y.npy', allow_pickle=True).tolist()
             mat_dist = np.load(path_file + str(dataset)+'_mat_dist.npy')
-            print('X,y loaded')
+            #print('X,y loaded')
         except :
 
             df = pd.read_csv(path_file + dataset + '.csv')
@@ -321,10 +321,10 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
 
     C = torch.Tensor(mat_dist)
     X=np.vstack(X).astype(np.float64)
-    print(X.shape, len(y))
+    #print(X.shape, len(y))
     #X= torch.FloatTensor(X)
     c = C.shape[0]
-    print(t, path_file)
+    #print(t, path_file)
 
     path_file =PATH+'/data/datasets/'+str(dataset)+'/'
 
@@ -372,7 +372,7 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             except : 
                 sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion)
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
-        print('X_train_s_shape : ', X_train_s.shape)
+        #print('X_train_s_shape : ', X_train_s.shape)
 
         ## FIXE A 200 exemples par labels
         #sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=1-0.2, stratify=y_train_0_ws)
@@ -387,7 +387,7 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
         y_train_s_prior, y_train_ws_prior = [element[:k] for element in y_train_s_prior], [element[:k] for element in y_train_ws_prior]
         y_test_s_prior, y_test_ws_prior = [element[:k] for element in y_test_s_prior], [element[:k] for element in y_test_ws_prior]
 
-        print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
+        #print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
 
         return C,c,  X_train_s, X_train_ws, y_train_s, y_train_ws, y_train_s_prior, y_train_ws_prior, X_test_s, X_test_ws, y_test_s, y_test_ws, y_test_s_prior, y_test_ws_prior
 
@@ -425,7 +425,7 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             except : 
                 sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion)
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
-        print('X_train_s_shape : ', X_train_s.shape)
+        #print('X_train_s_shape : ', X_train_s.shape)
 
         ## PAS PRECIS
         #sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=0.8, stratify=y_train_0_ws)  ## 200 dans le train
@@ -443,8 +443,8 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
         y_train_s_prior, y_train_ws_prior = [element[:k] for element in y_train_s_prior], [element[:k] for element in y_train_ws_prior]
         y_test_s_prior, y_test_ws_prior = [element[:k] for element in y_test_s_prior], [element[:k] for element in y_test_ws_prior]
 
-        print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
-        print('proportion vec ', y_train_s.count(0), y_train_ws.count(0))
+        #print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
+        #print('proportion vec ', y_train_s.count(0), y_train_ws.count(0))
 
 
 
