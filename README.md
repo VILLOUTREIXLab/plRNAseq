@@ -3,8 +3,8 @@ partial label learning for single cell RNA seq data classification. This code wa
   
 1) create virtual environment :
 ```
-mkdir plRNAseq
-cd plRNAseq
+mkdir plRNAseq && cd plRNAseq
+python3 -m pip install --user --upgrade pip
 python3 -m venv plenv
 source plenv/bin/activate
 pip install -r pl_requirements.txt
@@ -26,7 +26,6 @@ unzip Paul.zip -p data/datasets/
 
 4) run main script:  
 ```
-source venv activate
 python3 -u pl_main.py  
 ```
 
@@ -38,5 +37,6 @@ python3 -u pl_main_average.py
 ```
 python3 -u pl_main_average_gridsearch.py
 ```
-7) Need to change PATH file and save file  
+7) Need to change PATH file and save file
+8) missing things : Prostt data, load  and creation 
    
