@@ -1,14 +1,13 @@
 # plRNAseq
-partial label learning for single cell RNA seq data classification
-
-
+partial label learning for single cell RNA seq data classification. This code was produced for this article : biorxiv link
+  
 1) create virtual environment :
 
 
 2) unzip data : 
 in the current repertory :
 
-mkdir -p data/datasets/  
+<mkdir -p data/datasets/  >  
 unzip Packer.zip -p data/datasets/  
 unzip Planaria.zip -p data/datasets/  
 unzip Paul.zip -p data/datasets/  
