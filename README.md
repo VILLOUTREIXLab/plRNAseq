@@ -26,9 +26,9 @@ deactivate
 
 ```
 mkdir -p data/datasets/  
-unzip Packer.zip -p data/datasets/  
-unzip Planaria.zip -p data/datasets/  
-unzip Paul.zip -p data/datasets/  
+unzip Packer.zip -d data/datasets/  
+unzip Planaria.zip -d data/datasets/  
+unzip Paul.zip -d data/datasets/  
 ```
 
 3) run main script:  
