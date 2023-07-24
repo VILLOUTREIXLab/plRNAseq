@@ -5,14 +5,17 @@ partial label learning for single cell RNA seq data classification. This code wa
 
 
 2) unzip data in the current repertory :  
-'''    
+
+```
+
 mkdir -p data/datasets/  
 unzip Packer.zip -p data/datasets/  
 unzip Planaria.zip -p data/datasets/  
 unzip Paul.zip -p data/datasets/  
-    '''
 
-3) run main script :
+```
+
+4) run main script :
 source venv activate
 python3 -u pl_main.py  
 
