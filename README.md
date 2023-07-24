@@ -36,11 +36,11 @@ unzip Paul.zip -d data/datasets/
 python3 -u pl_main.py  
 ```
 
-4) For average results :  
+4) For average results :  note you may need to search good hyperparameters ...
 ```
 python3 -u pl_main_average.py
 ```
-5) For Gridsearch hyperparameters : Note you may need computation ressources, in this case you may change few thing in code see next paragraph  
+5) For Gridsearch hyperparameters : Note you may need computational ressources, in this case you may change few thing in code see next paragraph  
 ```
 python3 -u pl_main_average_gridsearch.py
 ```
