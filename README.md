@@ -1,5 +1,7 @@
 # plRNAseq
 partial label learning for single cell RNA seq data classification. This code was produced for this article : biorxiv link
+
+![plot](figure 1.jpg)
   
 1) create virtual environment :
 ```
