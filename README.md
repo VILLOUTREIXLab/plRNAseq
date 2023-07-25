@@ -44,11 +44,15 @@ python3 -u pl_main_average.py
 ```
 python3 -u pl_main_average_gridsearch.py
 ```
-6) Need to change PATH file and save file
-7) missing things : Prostt data, load  and creation
 
-8) For prosstt dataset, run create_tree.ipynb, you need to downland some additional packages :
+6) In addition, if you want to use partial lebelling, you can use script :
+```
+python3 -u create_partial_label_ppp.py
+```
+8) For prosstt dataset, in order to run , you need to downland some additional packages and create_da:
 ```
 pip install git+git://github.com/soedinglab/prosstt.git
+jupyter lab  create_tree.ipynb
+python3 -u create_partial_label_prosstt.py
 ```
    
