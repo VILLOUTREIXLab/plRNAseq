@@ -24,19 +24,19 @@ from pl_model import pl_hKNN, plSVM, pl_nn_prototybe_based
 #from pl_setting import split_partial_label
 
 #%%
-developpement = True # debugging
+developpement = False # debugging
 device = 'cpu'    #device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
 random.seed= 1342
 #%%
 dataset_liste = ['Packer', 'Paul','Planaria','linear','half','binary']
-dataset = dataset_liste[1]
+dataset = dataset_liste[2]
 
 # PARTIAL LABELLING SETTING 
-overlap = 0
-p = 1.0
-k=4
+overlap = 1  #[0,1]
+p = 0.1 # [0.1, 1.0] in the paper
+k=2 #[2,4,10]
 I = 'I0'
 
 # METHOD
@@ -145,7 +145,7 @@ C ,c, X_train_s, X_train_ws, y_train_s, y_train_ws,\
                                  I=I,
                                  t=0,
                                  sub_proportion=p,
-                                 k=4)
+                                 k=k)
 
 
 #%%
