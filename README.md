@@ -49,7 +49,6 @@ python3 -u pl_main_average_gridsearch.py
 
 8) For prosstt dataset, run create_tree.ipynb, you need to downland some additional packages :
 ```
-
-pip install -r prosstt_requirements.txt
+pip install git+git://github.com/soedinglab/prosstt.git
 ```
    
