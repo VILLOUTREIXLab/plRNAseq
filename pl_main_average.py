@@ -29,9 +29,11 @@ developpement = False  # debugging
 device = 'cpu'  # device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
+random.seed= 1342
 # %%
-dataset_liste = ['Packer', 'Paul', 'Planaria', 'linear', 'half', 'binary']
-dataset = dataset_liste[1]
+dataset_liste = ['Packer', 'Paul', 'Planaria']
+#COMING SOON [, 'linear', 'half', 'binary']
+dataset = dataset_liste[2]
 
 # PARTIAL LABELLING SETTING
 overlap = 1
@@ -41,8 +43,8 @@ I = 'I0'
 
 # METHOD
 method_liste = ['PB', 'plSVM', 'plhKNN']
-method = method_liste[1]
-linear = True  # False #neural network for PB or kernel for SVM
+method = method_liste[0]
+linear = False  # False #neural network for PB or kernel for SVM
 indice_network = 2 if linear == False else 0
 
 # HIERARCHY
@@ -231,7 +233,7 @@ model = init_method(method, dic_0)
 if method == 'plhKNN' and choix_C == 'flat':
     model.flat = True
 
-print('dataset :', dataset, ',overlap : ', overlap, ',n/p : ', p, ',k : ', k, ',I : ', I)
+print('dataset :', dataset, ', overlap : ', overlap, ', k : ', k, '  p : ', p,' I : ', I,)
 print('Method : ', method, ' linear : ', linear, ' hierarchy : ', choix_C)
 
 

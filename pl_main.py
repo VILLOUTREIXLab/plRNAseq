@@ -28,6 +28,7 @@ developpement = True # debugging
 device = 'cpu'    #device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
+random.seed= 1342
 #%%
 dataset_liste = ['Packer', 'Paul','Planaria','linear','half','binary']
 dataset = dataset_liste[1]
@@ -277,7 +278,7 @@ performance = [ model.score(y_test=y_train_s, y_pred=pred_train_s),
 
                 ]
 
-print('dataset :' , dataset, ',overlap : ' , overlap,  ',n/p : ', p, ',k : ',k,',I : ',I )
+print('dataset :', dataset, ', overlap : ', overlap, ', k : ', k, '  p : ', p,' I : ', I,)
 print('Method : ', method, ' linear : ', linear, ' hierarchy : ', choix_C)
 print('supervised test set accuracy : ',performance[4])
 print('partial label test set accuracy : ',performance[6])

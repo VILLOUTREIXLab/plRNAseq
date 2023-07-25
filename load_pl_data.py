@@ -13,36 +13,11 @@ import itertools
 from joblib import Parallel, delayed
 from joblib import Memory
 
-# python3 -u pl_nn_jz/pl_svm_0.py
-# %%
-
-# modules = 50
-# value = 0.1
-# topology = 'half'
-# lenght_tree = 21
-
-# overlap = 0
-# I = (15, 253)
-# I = (1, 15)
-# #
-
-# k = 4
-# sub_proportion = 0.02
-# sub_proportion = 0.2
-# save = False
-# developpement = True
-
-
-# choix_C = 'C'
-path_jz = '/gpfswork/rech/skz/uix43mg/'
-
-
-
 def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overlap, I, t, sub_proportion):
     '''
     return les données train test s, ws avec prior NORMALISEES  en train /test
     '''
-    
+    random.seed = 1342
     path_file_abs = PATH
 
     name_tree = '_'+str(modules)+'_'+str(value)
@@ -96,12 +71,12 @@ def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overl
             np.array(y_ws_prior)[indice_train_ws].tolist(), np.array(y_ws_prior)[indice_test_ws].tolist()
 
 
-        ### ON FAIT VARIER LE NOMBRE DE SUPERVISION
+        ### choose the amount of supervised data according to n
         sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion, stratify=y_train_0_s)
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
         print('X_train_s_shape : ', X_train_s.shape)
 
-        ## FIXE A 200 exemples par labels
+        ## set 200 partial label exemples per label
         sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=1-0.2, stratify=y_train_0_ws)
         X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws)[sub_indice_train_ws], np.array(y_ws)[sub_indice_train_ws].tolist(), np.array(y_ws_prior)[sub_indice_train_ws].tolist()
 
@@ -116,7 +91,7 @@ def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overl
         y_train_s_prior, y_train_ws_prior = [element[:k] for element in y_train_s_prior], [element[:k] for element in y_train_ws_prior]
         y_test_s_prior, y_test_ws_prior = [element[:k] for element in y_test_s_prior], [element[:k] for element in y_test_ws_prior]
 
-        print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
+        #print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
 
         return C,c,  X_train_s, X_train_ws, y_train_s, y_train_ws, y_train_s_prior, y_train_ws_prior, X_test_s, X_test_ws, y_test_s, y_test_ws, y_test_s_prior, y_test_ws_prior
 
@@ -141,7 +116,7 @@ def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overl
             np.array(y_ws_prior)[indice_train_ws].tolist(), np.array(y_ws_prior)[indice_test_ws].tolist()
 
 
-        ### ON FAIT VARIER LE NOMBRE DE SUPERVISION
+        ### choose the amount of supervised data according to n
         test_size_s=0.95
         if sub_proportion == 0.8 :
             test_size_s = 0.5
@@ -149,7 +124,7 @@ def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overl
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
         print('X_train_s_shape : ', X_train_s.shape)
 
-        ## FIXE A 200 exemples par labels
+        ## set 200 for partial label exemples per labels
         sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=0.5, stratify=y_train_0_ws)  ## 200 dans le train
         X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws)[sub_indice_train_ws], np.array(y_ws)[sub_indice_train_ws].tolist(), np.array(y_ws_prior)[sub_indice_train_ws].tolist()
 
@@ -180,7 +155,7 @@ def  load_dataset_supervised(PATH, dataset, t, sub_proportion):
     '''
     return les données train test s, ws avec prior NORMALISEES  en train /test
     '''
-
+    random.seed = 1342
 
     print(dataset)
     if dataset == 'Packer' : 
@@ -262,10 +237,7 @@ def  load_dataset_supervised(PATH, dataset, t, sub_proportion):
     print('sub_indice proportion :', sub_proportion)
     proportion_vec = [y_train_0.count(e) for e in range(c)]
     print(np.mean(proportion_vec), np.std(proportion_vec), min(proportion_vec), max(proportion_vec))
-    #%%
 
-
-    
     #y_test_prior = [[y] + random.sample(list(set(torch.where(C[y]  < I[1])[0].tolist()) & set(torch.where(C[y]  >= I[0])[0].tolist()) ),  k =k) for y in y_test ]
 
 
@@ -275,9 +247,10 @@ def  load_dataset_supervised(PATH, dataset, t, sub_proportion):
 
 def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
     '''
-    return les données train test s, ws avec prior NORMALISEES  en train /test
+    return data train test supervised, partial label, with prior and normalized
+    données train test s, ws avec prior NORMALISEES  en train /test
     '''
-    
+    random.seed = 1342
     if dataset == 'Packer' : 
         path_file = PATH+'/data/datasets/'+str(dataset)+'/'
         try : 
@@ -308,23 +281,13 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
         y= np.load(path_file+'sample/y.npy', allow_pickle=True).tolist()
 
         mat_dist = np.load(path_file + str(dataset)+'_mat_dist.npy')
-        # except :
-        #     path_file = os.getcwd()+'/data/datasets/'+str(dataset)+'/'
-        #     X = np.load(path_file+'sample/X.npy', allow_pickle=True)
-        #     y= np.load(path_file+'sample/y.npy', allow_pickle=True).tolist()
-
-        #     mat_dist = np.load(path_file + str(dataset)+'_mat_dist.npy')
-
-        if dataset == 'Paul':
+        if dataset == 'Paul':  #unique exemple for last label
             X, y = X[:-1], y[:-1]
 
 
     C = torch.Tensor(mat_dist)
     X=np.vstack(X).astype(np.float64)
-    #print(X.shape, len(y))
-    #X= torch.FloatTensor(X)
     c = C.shape[0]
-    #print(t, path_file)
 
     path_file =PATH+'/data/datasets/'+str(dataset)+'/'
 
@@ -339,13 +302,8 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
     y_ws = np.load(name_to_save+'y_ws.npy').tolist()
     y_ws_prior = np.load(name_to_save+'y_ws_prior.npy').tolist()
 
-
-
-
     if overlap == 0 :
 
-             
-        
         indice_train_s = np.load(name_to_save+'indice_train_s_'+str(t)+'.npy').tolist()
         indice_test_s = np.load(name_to_save+'indice_test_s_'+str(t)+'.npy').tolist()
         indice_train_ws = np.load(name_to_save+'indice_train_ws_'+str(t)+'.npy').tolist()
@@ -363,38 +321,34 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             np.array(y_ws_prior)[indice_train_ws].tolist(), np.array(y_ws_prior)[indice_test_ws].tolist()
 
 
-        ### ON FAIT VARIER LE NOMBRE DE SUPERVISION
+        ### amount of supervised data p
         if sub_proportion == 1.0 :
             sub_indice_train_s = indice_train_s
         else :
-            try : 
+            try :
                 sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion, stratify=y_train_0_s)
-            except : 
+            except :
                 sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion)
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
         #print('X_train_s_shape : ', X_train_s.shape)
 
-        ## FIXE A 200 exemples par labels
-        #sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=1-0.2, stratify=y_train_0_ws)
-        #X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws)[sub_indice_train_ws], np.array(y_ws)[sub_indice_train_ws].tolist(), np.array(y_ws_prior)[sub_indice_train_ws].tolist()
+
         X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws), np.array(y_ws).tolist(), np.array(y_ws_prior).tolist()
 
+        X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))),
+            [X_train_s.size(0), X_train_ws.size(0)])
 
-        #X_test_s, X_test_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))), [X_test_s.size(0), X_test_ws.size(0)])
-        #X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))), [X_train_s.size(0), X_train_ws.size(0)])
+        X_test_s, X_test_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))), [X_test_s.size(0), X_test_ws.size(0)])
 
         
         y_train_s_prior, y_train_ws_prior = [element[:k] for element in y_train_s_prior], [element[:k] for element in y_train_ws_prior]
         y_test_s_prior, y_test_ws_prior = [element[:k] for element in y_test_s_prior], [element[:k] for element in y_test_ws_prior]
 
-        #print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
 
         return C,c,  X_train_s, X_train_ws, y_train_s, y_train_ws, y_train_s_prior, y_train_ws_prior, X_test_s, X_test_ws, y_test_s, y_test_ws, y_test_s_prior, y_test_ws_prior
 
     if overlap == 1 :
 
-           
-        
         indice_train_s = np.load(name_to_save+'indice_train_s_'+str(t)+'.npy').tolist()
         indice_test_s = np.load(name_to_save+'indice_test_s_'+str(t)+'.npy').tolist()
         indice_train_ws = np.load(name_to_save+'indice_train_ws_'+str(t)+'.npy').tolist()
@@ -412,7 +366,6 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             np.array(y_ws_prior)[indice_train_ws].tolist(), np.array(y_ws_prior)[indice_test_ws].tolist()
 
 
-        ### PAS PRECIS
         test_size_s=0.8
         if sub_proportion == 0.8 :
             test_size_s = 0.5
@@ -425,28 +378,19 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
             except : 
                 sub_indice_train_s, _ = train_test_split(indice_train_s, test_size= 1-sub_proportion)
         X_train_s, y_train_s, y_train_s_prior = torch.FloatTensor(X_s)[sub_indice_train_s], np.array(y_s)[sub_indice_train_s].tolist(), np.array(y_s_prior)[sub_indice_train_s].tolist()
-        #print('X_train_s_shape : ', X_train_s.shape)
 
-        ## PAS PRECIS
-        #sub_indice_train_ws, _ = train_test_split(indice_train_ws, test_size=0.8, stratify=y_train_0_ws)  ## 200 dans le train
-        #sub_indice_train_ws  = indice_train_ws
         X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws), np.array(y_ws).tolist(), np.array(y_ws_prior).tolist()
 
 
-        X_test_s, X_test_ws = torch.split(
-            torch.FloatTensor(
-                preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))),
-            [X_test_s.size(0), X_test_ws.size(0)])
-
+        #normalise train data
 
         X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))), [X_train_s.size(0), X_train_ws.size(0)])
+
+        # normalize test data
+        X_test_s, X_test_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))),  [X_test_s.size(0), X_test_ws.size(0)])
+
         y_train_s_prior, y_train_ws_prior = [element[:k] for element in y_train_s_prior], [element[:k] for element in y_train_ws_prior]
         y_test_s_prior, y_test_ws_prior = [element[:k] for element in y_test_s_prior], [element[:k] for element in y_test_ws_prior]
-
-        #print('y_train_ws_prior shape : ',np.shape(np.array(y_train_ws_prior)))
-        #print('proportion vec ', y_train_s.count(0), y_train_ws.count(0))
-
-
 
         return C ,c, X_train_s, X_train_ws, y_train_s, y_train_ws, y_train_s_prior, y_train_ws_prior, X_test_s, X_test_ws, y_test_s, y_test_ws, y_test_s_prior, y_test_ws_prior
 
