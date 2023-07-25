@@ -40,16 +40,16 @@ python3 -u pl_main.py
 ```
 python3 -u pl_main_average.py
 ```
-5) For Gridsearch hyperparameters :(you may need computational ressources)
+5) For Gridsearch hyperparameters : (you may need computational ressources)
 ```
 python3 -u pl_main_average_gridsearch.py
 ```
 
-6) In addition, if you want to use create new partial lebelling, you can use script :
+6) In addition, if you want to use new partial lebelling or apply the pipeline to new dataset, you can use script :
 ```
 python3 -u create_partial_label_ppp.py
 ```
-7) For prosstt dataset, in order to run , you need to downland some additional packages contained in prosstt package, then create dataset with create_tree.ipynb and partial labelling data :
+7) For prosstt dataset, in order to run , you need to downland some additional packages contained in prosstt package, then create dataset and generate partial labelling data :
 ```
 pip install git+git://github.com/soedinglab/prosstt.git
 jupyter lab  create_tree.ipynb
