@@ -29,7 +29,7 @@ developpement = False  # debugging
 device = 'cpu'  # device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
-random.seed= 1342
+random.seed= 1312
 # %%
 dataset_liste = ['Packer', 'Paul', 'Planaria']
 #COMING SOON [, 'linear', 'half', 'binary']
@@ -294,6 +294,9 @@ for t in range(5):
 
                    ]
     all_results.append([ performance[4],  performance[6],  performance[7]])
+
+print('dataset :', dataset, ', overlap : ', overlap, ', k : ', k, '  p : ', p,' I : ', I,)
+print('Method : ', method, ' linear : ', linear, ' hierarchy : ', choix_C)
 print(' Test set :   Supervised,       PL,      PL Prior')
 print('AVERAGE RESULTS : ', np.mean(all_results, axis=0))
 print('STD  : ', np.std(all_results, axis=0))

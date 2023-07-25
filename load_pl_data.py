@@ -17,7 +17,7 @@ def load_data_partial_label(PATH, topology, lenght_tree, modules,k, value, overl
     '''
     return les données train test s, ws avec prior NORMALISEES  en train /test
     '''
-    random.seed = 1342
+    random.seed = 1312
     path_file_abs = PATH
 
     name_tree = '_'+str(modules)+'_'+str(value)
@@ -155,7 +155,7 @@ def  load_dataset_supervised(PATH, dataset, t, sub_proportion):
     '''
     return les données train test s, ws avec prior NORMALISEES  en train /test
     '''
-    random.seed = 1342
+    random.seed = 1312
 
     print(dataset)
     if dataset == 'Packer' : 
@@ -245,12 +245,12 @@ def  load_dataset_supervised(PATH, dataset, t, sub_proportion):
 
 
 
-def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
+def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k, normalize=True):
     '''
     return data train test supervised, partial label, with prior and normalized
     données train test s, ws avec prior NORMALISEES  en train /test
     '''
-    random.seed = 1342
+    random.seed = 1312
     if dataset == 'Packer' : 
         path_file = PATH+'/data/datasets/'+str(dataset)+'/'
         try : 
@@ -334,9 +334,9 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
 
 
         X_train_ws, y_train_ws, y_train_ws_prior = torch.FloatTensor(X_ws), np.array(y_ws).tolist(), np.array(y_ws_prior).tolist()
-
-        X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))),
-            [X_train_s.size(0), X_train_ws.size(0)])
+        if normalize :
+            X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))),
+                [X_train_s.size(0), X_train_ws.size(0)])
 
         X_test_s, X_test_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))), [X_test_s.size(0), X_test_ws.size(0)])
 
@@ -383,8 +383,8 @@ def load_dataset_partial_label(PATH, dataset, overlap, I, t, sub_proportion, k):
 
 
         #normalise train data
-
-        X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))), [X_train_s.size(0), X_train_ws.size(0)])
+        if normalize :
+            X_train_s, X_train_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_train_s, X_train_ws), dim=0))), [X_train_s.size(0), X_train_ws.size(0)])
 
         # normalize test data
         X_test_s, X_test_ws = torch.split(torch.FloatTensor(preprocessing.StandardScaler().fit_transform(torch.cat((X_test_s, X_test_ws), dim=0))),  [X_test_s.size(0), X_test_ws.size(0)])

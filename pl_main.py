@@ -28,7 +28,7 @@ developpement = False # debugging
 device = 'cpu'    #device = 'cuda:0'
 PATH = os.getcwd()
 path_file_abs = PATH
-random.seed= 1342
+random.seed= 1312
 #%%
 dataset_liste = ['Packer', 'Paul','Planaria','linear','half','binary']
 dataset = dataset_liste[2]
