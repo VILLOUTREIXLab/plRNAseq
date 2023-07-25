@@ -31,18 +31,18 @@ PATH = os.getcwd()
 path_file_abs = PATH
 # %%
 dataset_liste = ['Packer', 'Paul', 'Planaria', 'linear', 'half', 'binary']
-dataset = dataset_liste[2]
+dataset = dataset_liste[1]
 
 # PARTIAL LABELLING SETTING
-overlap = 0
+overlap = 1
 p = 0.1
-k = 10
+k = 2
 I = 'I0'
 
 # METHOD
 method_liste = ['PB', 'plSVM', 'plhKNN']
-method = method_liste[0]
-linear = False  # False #neural network for PB or kernel for SVM
+method = method_liste[1]
+linear = True  # False #neural network for PB or kernel for SVM
 indice_network = 2 if linear == False else 0
 
 # HIERARCHY
@@ -254,6 +254,7 @@ for t in range(5):
 
 
     #print('FIT')
+    dic_0 = init_dict_0(method)[0]
     model = init_method(method, dic_0)
     if method == 'plhKNN' and choix_C == 'flat':
         model.flat = True
@@ -293,6 +294,7 @@ for t in range(5):
     all_results.append([ performance[4],  performance[6],  performance[7]])
 print(' Test set :   Supervised,       PL,      PL Prior')
 print('AVERAGE RESULTS : ', np.mean(all_results, axis=0))
+print('STD  : ', np.std(all_results, axis=0))
 # print('supervised test set accuracy : ', np.mean(performance[4])
 # print('partial label test set accuracy : ', performance[6])
 # print('partial label test set accuracy with prior : ', performance[7])
