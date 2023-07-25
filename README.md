@@ -45,5 +45,11 @@ python3 -u pl_main_average.py
 python3 -u pl_main_average_gridsearch.py
 ```
 6) Need to change PATH file and save file
-7) missing things : Prostt data, load  and creation 
+7) missing things : Prostt data, load  and creation
+
+8) For prosstt dataset, run create_tree.ipynb, you need to downland some additional packages :
+```
+
+pip install -r prosstt_requirements.txt
+```
    
