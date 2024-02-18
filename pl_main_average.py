@@ -22,6 +22,9 @@ from collections import Counter
 from load_pl_data import load_dataset_partial_label
 from pl_model import pl_hKNN, plSVM, pl_nn_prototybe_based
 
+
+from init_dict import init_dict_0, init_method
+
 # from pl_setting import split_partial_label
 
 # %%
@@ -31,7 +34,13 @@ PATH = os.getcwd()
 path_file_abs = PATH
 random.seed= 1312
 # %%
-dataset_liste = ['Packer', 'Paul', 'Planaria']
+dataset_liste = ['Packer', # C. Elegans
+                    'Paul',  # Myeloid Progenitor
+                     'Planaria'  # S. Mediterranea
+
+
+
+                     ]
 #COMING SOON [, 'linear', 'half', 'binary']
 dataset = dataset_liste[2]
 
@@ -42,7 +51,25 @@ k = 2
 I = 'I0'
 
 # METHOD
-method_liste = ['PB', 'plSVM', 'plhKNN']
+method_liste = [
+
+# ALGO IRL 
+'PB',  # Prototype Based
+'plSVM',  # Support Vector Machine  
+'plLR',  # Logistic Regression
+
+# Special
+
+'plhKNN',  # k Nearest Neighbors
+
+# Algo IFR 
+'plRF', # Random Forest
+'plXGBM', # Extreme Gradient Boosting Method
+'plkernelSVC', # kernel SVM (real kernel implmentation)
+'plEMLR',   # LR with algo IFR
+'plEMSVM', # SVM with algo IFR
+]
+
 method = method_liste[0]
 linear = False  # False #neural network for PB or kernel for SVM
 indice_network = 2 if linear == False else 0
@@ -145,91 +172,11 @@ C, c, X_train_s, X_train_ws, y_train_s, y_train_ws, \
 
 # %%
 
-def init_dict_0(method):
-    if method == 'plSVM':
-        epochs = 5 if developpement else 101
-        kernel = True if indice_network == 2 else False
-        dict_0 = {'W': nn.Sequential(nn.Linear(X_train_s.size(1), c)),
-                  'optimizer': 'Adam',
-                  'lr_P': 1.e-5,
-                  'lambdaa': 1.e-2,
-                  'epochs': epochs,
-                  'device': device,
-                  'C': mat_C,
-                  'C_score': C,
-                  'kernel': kernel}
-        tiny_model = plSVM(W=nn.Sequential(nn.Linear(X_train_s.size(1), c)), )
-
-    if method == 'plhKNN':
-        dict_0 = {'C': mat_C, 'C_score': C, 'k': 10}
-        tiny_model = pl_hKNN()
-
-    if method == 'PB':
-        epochs_regression, epoch_xsi = 101, 101
-        if developpement:
-            epochs_regression, epoch_xsi = 5, 5
-        g = X_train_s.shape[1]
-        liste_nn = [
-            nn.Sequential(nn.Linear(g, c)),
-            nn.Sequential(nn.Linear(g, c), nn.Tanh(), nn.Linear(c, c)),
-            nn.Sequential(nn.Linear(g, c), nn.Tanh(), nn.Linear(c, c), nn.Tanh(), nn.Linear(c, c)),
-            nn.Sequential(nn.Linear(g, c), nn.Tanh(), nn.Linear(c, c), nn.Tanh(), nn.Linear(c, c), nn.Tanh(),
-                          nn.Linear(c, c)),
-        ]
-        P = liste_nn[indice_network]
-
-        dict_0 = {'Network': P,
-                  'optimizer': 'Adam',
-                  'lr_P': 1.e-5,
-                  'lambdaa': 1.e-2,
-                  'lambdaa_solution_regression': 1.e-2,
-                  'epochs_regression': epochs_regression,
-                  'epochs_xsi': epoch_xsi,
-                  'device': device,
-                  'C': mat_C,
-                  'C_score': C,
-                  'distance': 'correlation'}
-        tiny_model = pl_nn_prototybe_based()
-    return dict_0, tiny_model
-
-
-def init_method(method, dict_entry):
-    if method == 'plSVM':
-        model = plSVM(W=nn.Sequential(nn.Linear(X_train_s.size(1), c)),
-                      C=dict_entry['C'],
-                      C_score=dict_entry['C_score'],
-                      device=dict_entry['device'],
-                      lambdaa=dict_entry['lambdaa'],
-                      epochs=dict_entry['epochs'],
-                      kernel=dict_entry['kernel'], )
-
-    if method == 'plhKNN':
-        model = pl_hKNN(
-            k=dict_entry['k'],
-            C=dict_entry['C'],
-            C_score=dict_entry['C_score']
-
-        )
-
-    if method == 'PB':
-        model = pl_nn_prototybe_based(Network=dict_entry['Network'],
-                                      lambdaa=dict_entry['lambdaa'],
-                                      lambdaa_solution_regression=dict_entry['lambdaa_solution_regression'],
-                                      optimizer=dict_entry['optimizer'],
-                                      distance=dict_entry['distance'],
-                                      lr_P=dict_entry['lr_P'],
-                                      epochs_regression=dict_entry['epochs_regression'],
-                                      epochs_xsi=dict_entry['epochs_xsi'],
-                                      device=dict_entry['device'],
-                                      C=dict_entry['C'],
-                                      C_score=dict_entry['C_score'])
-
-    return model
 
 
 # %%
-dic_0 = init_dict_0(method)[0]
-model = init_method(method, dic_0)
+dict_0, model = init_dict_0(method=method, indice_network=indice_network, dim_int=X_train_s.size(1), c=c, mat_C=mat_C, C=C, device=device,  developpement=developpement)
+
 if method == 'plhKNN' and choix_C == 'flat':
     model.flat = True
 
@@ -256,8 +203,17 @@ for t in range(5):
 
 
     #print('FIT')
-    dic_0 = init_dict_0(method)[0]
-    model = init_method(method, dic_0)
+    dict_0, model = init_dict_0(method=method, indice_network=indice_network, dim_int=X_train_s.size(1), c=c, mat_C=mat_C, C=C, device=device,  developpement=developpement)
+
+    grid = model.tiny_param_grid()  #  spectific parameters which require gridsearch
+
+    for (keys, values) in grid.items():
+        dict_0[keys] = random.choice(values)
+
+
+    model = init_method(method=method, dict_entry=dict_0)
+
+
     if method == 'plhKNN' and choix_C == 'flat':
         model.flat = True
     model.fit(X_train=torch.cat((X_train_s, X_train_ws), dim=0),
@@ -300,6 +256,3 @@ print('Method : ', method, ' linear : ', linear, ' hierarchy : ', choix_C)
 print(' Test set :   Supervised,       PL,      PL Prior')
 print('AVERAGE RESULTS : ', np.mean(all_results, axis=0))
 print('STD  : ', np.std(all_results, axis=0))
-# print('supervised test set accuracy : ', np.mean(performance[4])
-# print('partial label test set accuracy : ', performance[6])
-# print('partial label test set accuracy with prior : ', performance[7])
